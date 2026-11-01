@@ -1,0 +1,29 @@
+pkgname=grey-burst-compositor
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="grey-burst Wayland compositor"
+arch=('x86_64')
+url="https://github.com/stevennguyen02/grey-burst"
+license=('MIT')
+
+makedepends=('cargo' 'git')
+source=("grey-burst::git+${url}.git#tag=v${pkgver}")
+sha256sums=('SKIP')
+
+build() {
+	cd "$srcdir/grey-burst"
+
+	cargo build --release --locked \
+		-p grey-burst-compositor
+}
+
+package() {
+	cd "$srcdir/grey-burst"
+
+	install -Dm755 \
+		target/release/grey-burst-compositor \
+		"$pkgdir/usr/bin/grey-burst-compositor"
+
+	install -Dm644 LICENSE \
+		"$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
